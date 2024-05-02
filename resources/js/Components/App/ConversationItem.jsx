@@ -1,4 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
+import UserOptionsDropdown from "@/Components/App/UserOptionsDropdown.jsx";
+import UserAvatar from "@/Components/App/UserAvatar.jsx";
+import GroupAvatar from "@/Components/App/GroupAvatar.jsx";
 
 const ConversationItem = ({
     conversation,
@@ -54,8 +57,21 @@ const ConversationItem = ({
                     <h3 className="text-sm font-semibold overflow-hidden text-nowrap text-ellipsis">
                         {conversation.name}
                     </h3>
+                    {conversation.last_message_date && (
+                        <span className="text-nowrap">
+                            {conversation.last_message_date}
+                        </span>
+                    )}
                 </div>
+                {conversation.last_message && (
+                    <p className="text-xs text-nowrap overflow-hidden text-ellipsis">
+                        {conversation.last_message}
+                    </p>
+                )}
             </div>
+            {currentUser.is_admin && conversation.is_user && (
+                <UserOptionsDropdown conversation={conversation} />
+            )}
         </Link>
     );
 }

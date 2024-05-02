@@ -7,7 +7,7 @@ import ConversationItem from "@/Components/App/ConversationItem.jsx";
 const ChatLayout = ({ children }) => {
     const page = usePage();
     const conversations = page.props.conversations;
-    const selectedConversations = page.props.selectedConversations;
+    const selectedConversation = page.props.selectedConversation;
     const [onlineUsers, setOnlineUsers] = useState({});
     const [localConversations, setLocalConversations] = useState([]);
     const [sortedConversations, setSortedConversations] = useState([]);
@@ -25,7 +25,7 @@ const ChatLayout = ({ children }) => {
     }
 
     console.log("conversations", conversations);
-    console.log("selectedConversations", selectedConversations);
+    console.log("selectedConversation", selectedConversation);
 
     useEffect(() => {
         setSortedConversations(
@@ -96,9 +96,9 @@ const ChatLayout = ({ children }) => {
             <div className="flex-1 w-full flex overflow-hidden">
                 <div
                     className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden
-                    ${selectedConversations ? "-ml-[100%] sm:ml-0" : ""}`}
+                    ${selectedConversation ? "-ml-[100%] sm:ml-0" : ""}`}
                 >
-                    <div className="flex items-center justify-between py-2 px-3 text-x1 font-medium">
+                    <div className="flex items-center justify-between py-2 px-3 text-x1 font-medium text-gray-200">
                         My Conversations
                         <div
                             className="tooltip tooltip-left"

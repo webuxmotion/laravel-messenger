@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('dashboard');
+
+    Route::get('/user/{user}', [\App\Http\Controllers\MessageController::class, 'byUser'])->name('chat.user');
+    Route::get('/group/{group}', [\App\Http\Controllers\MessageController::class, 'byGroup'])->name('chat.group');
+
+    Route::post('/message', [\App\Http\Controllers\MessageController::class, 'store'])->name('message.store');
+    Route::delete('/message/{message}', [\App\Http\Controllers\MessageController::class, 'destroy'])->name('message.destroy');
+    Route::get('/message/older/{message}', [\App\Http\Controllers\MessageController::class, 'loadOlder'])->name('message.older');
 });
 
 Route::middleware('auth')->group(function () {
