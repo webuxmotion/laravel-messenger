@@ -24,8 +24,8 @@ const ChatLayout = ({ children }) => {
         )
     }
 
-    console.log("conversations", conversations);
-    console.log("selectedConversation", selectedConversation);
+    // console.log("conversations", conversations);
+    // console.log("selectedConversation", selectedConversation);
 
     useEffect(() => {
         setSortedConversations(
