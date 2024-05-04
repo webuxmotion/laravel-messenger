@@ -5,10 +5,29 @@ import {ChatBubbleLeftRightIcon} from "@heroicons/react/16/solid/index.js";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
 import MessageInput from "@/Components/App/MessageInput.jsx";
+import {useEventBus} from "@/EventBus.jsx";
 
 function Home({ messages = null, selectedConversation = null }) {
     const [localMessages, setLocalMessages] = useState([]);
     const messagesCtrRef = useRef(null);
+    const { on } = useEventBus();
+    const messageCreated = (message) => {
+        console.log('message', message);
+        if (
+            selectedConversation &&
+            selectedConversation.is_group &&
+            selectedConversation.id == message.group_id
+        ) {
+            setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+        if (
+            selectedConversation &&
+            selectedConversation.is_user &&
+            (selectedConversation.id == message.sender_id || selectedConversation.id == message.receiver_id)
+        ) {
+            setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -16,6 +35,12 @@ function Home({ messages = null, selectedConversation = null }) {
                 messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
             }
         }, 10);
+
+        const offCreated = on('message.created', messageCreated);
+
+        return () => {
+            offCreated();
+        }
     }, [selectedConversation]);
 
     useEffect(() => {
