@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import {ChatBubbleLeftRightIcon} from "@heroicons/react/16/solid/index.js";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
+import MessageInput from "@/Components/App/MessageInput.jsx";
 
 function Home({ messages = null, selectedConversation = null }) {
     const [localMessages, setLocalMessages] = useState([]);
@@ -59,7 +60,7 @@ function Home({ messages = null, selectedConversation = null }) {
                             </div>
                         )}
                     </div>
-                    {/*<MessageInput conversation={selectedConversation} />*/}
+                    <MessageInput conversation={selectedConversation} />
                 </>
             )}
         </>
