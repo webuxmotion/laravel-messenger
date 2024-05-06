@@ -30,7 +30,6 @@ export default function Authenticated({ header, children }) {
                     console.log(error);
                 })
                 .listen("SocketMessage", (e) => {
-                    console.log("SocketMessage", e);
                     const message = e.message;
 
                     emit("message.created", message);

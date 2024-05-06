@@ -16,7 +16,6 @@ function Home({ messages = null, selectedConversation = null }) {
     const loadMoreIntersect = useRef(null);
     const { on } = useEventBus();
     const messageCreated = (message) => {
-        console.log('message', message);
         if (
             selectedConversation &&
             selectedConversation.is_group &&
