@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {PencilSquareIcon} from "@heroicons/react/16/solid/index.js";
 import TextInput from "@/Components/TextInput.jsx";
 import ConversationItem from "@/Components/App/ConversationItem.jsx";
+import {useEventBus} from "@/EventBus.jsx";
 
 const ChatLayout = ({ children }) => {
     const page = usePage();
@@ -12,6 +13,7 @@ const ChatLayout = ({ children }) => {
     const [localConversations, setLocalConversations] = useState([]);
     const [sortedConversations, setSortedConversations] = useState([]);
     const isUserOnline = (userId) => onlineUsers[userId];
+    const { on } = useEventBus();
 
     const onSearch = (event) => {
         const search = event.target.value.toLowerCase();
@@ -23,6 +25,44 @@ const ChatLayout = ({ children }) => {
             })
         )
     }
+
+    const messageCreated = (message) => {
+        setLocalConversations((oldUsers) => {
+            return oldUsers.map((user) => {
+                if (
+                    message.receiver_id &&
+                    !user.is_group &&
+                    (user.id == message.sender_id || user.id == message.receiver_id)
+                ) {
+                    user.last_message = message.message;
+                    user.last_message_date = message.created_at;
+
+                    return user;
+                }
+
+                if (
+                    message.group_id &&
+                    user.is_group &&
+                    user.id == message.group_id
+                ) {
+                    user.last_message = message.message;
+                    user.last_message_date = message.created_at;
+
+                    return user;
+                }
+
+                return user;
+            })
+        });
+    }
+
+    useEffect(() => {
+        const offCreated = on("message.created", messageCreated);
+
+        return () => {
+            offCreated();
+        }
+    }, [on]);
 
     useEffect(() => {
         setSortedConversations(
@@ -36,7 +76,7 @@ const ChatLayout = ({ children }) => {
                 }
                 if (a.last_message_date && b.last_message_date) {
                     // fixit
-                    // return b.last_message_date.localCompare(a.last_message_date);
+                    return b.last_message_date.localeCompare(a.last_message_date);
                 } else if (a.last_message_date) {
                     return -1;
                 } else if (b.last_message_date) {
